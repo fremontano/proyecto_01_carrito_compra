@@ -20,7 +20,8 @@ function App() {
 
 
   // Aquí se almacenarán los datos de las guitarras en un array
-  const [data, setData] = useState(dbGuitars);
+  // const [data, setData] = useState(dbGuitars); la variable setData no se esta utilizando se puede eliminar
+  const [data] = useState(dbGuitars);
   const [cart, setCart] = useState(initialCart);
 
   const MAX_ITEMS = 10;
@@ -114,6 +115,7 @@ function App() {
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
         <div className="row mt-5">
+
           {/* Cada guitarra se renderiza aquí */}
           {
             data.map((guitar) => (

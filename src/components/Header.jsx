@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 
 export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQuantity, clearCart }) => {
     // Estado derivado que indica si el carrito está vacío
@@ -6,8 +7,6 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
 
     // Función que calcula el precio total de los productos en el carrito
     const cartTotalPrecio = useMemo(() => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);
-
-
 
     return (
         <header className="py-5 header">
@@ -21,7 +20,6 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
                     <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
                         <div className="carrito">
                             <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
-
                             <div id="carrito" className="bg-white p-3">
                                 {isEmpty ? (
                                     <p className="text-center">El carrito está vacío</p>
@@ -51,15 +49,17 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
                                                                 type="button"
                                                                 className="btn btn-dark"
                                                                 onClick={() => decrementarQuantity(guitar.id)}
-                                                            >-</button>
+                                                            >
+                                                                -
+                                                            </button>
                                                             {guitar.quantity}
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-dark"
                                                                 onClick={() => incrementarQuantity(guitar.id)}
                                                             >
-                                                                +</button>
-
+                                                                +
+                                                            </button>
                                                         </td>
                                                         <td>
                                                             <button
@@ -67,7 +67,8 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
                                                                 type="button"
                                                                 onClick={() => removeFromCart(guitar.id)}
                                                             >
-                                                                X</button>
+                                                                X
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -81,7 +82,9 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
                                         <button
                                             className="btn btn-dark w-100 mt-3 p-2"
                                             onClick={clearCart}
-                                        >Vaciar Carrito</button>
+                                        >
+                                            Vaciar Carrito
+                                        </button>
                                     </>
                                 )}
                             </div>
@@ -91,4 +94,19 @@ export const Header = ({ cart, removeFromCart, incrementarQuantity, decrementarQ
             </div>
         </header>
     );
+};
+
+// Definir PropTypes para validar las props
+Header.propTypes = {
+    cart: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        quantity: PropTypes.number.isRequired
+    })).isRequired,
+    removeFromCart: PropTypes.func.isRequired,
+    incrementarQuantity: PropTypes.func.isRequired,
+    decrementarQuantity: PropTypes.func.isRequired,
+    clearCart: PropTypes.func.isRequired
 };
