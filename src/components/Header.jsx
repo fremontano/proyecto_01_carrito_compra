@@ -1,9 +1,15 @@
-export const Header = ({ cart }) => {
-    // Estado derivado para saber si el carrito esta vacio
-    const isEmpty = () => cart.length === 0;
+import { useMemo } from "react";
 
-    // Funcion para sumar los productos
-    const cartTotalPrecio = () => cart.reduce((total, item) => total + (item.quantity * item.price), 0);
+export const Header = ({ cart }) => {
+    // Estado derivado que indica si el carrito está vacío
+    const isEmpty = useMemo(() => cart.length === 0, [cart]);
+
+    // Función que calcula el precio total de los productos en el carrito
+    // Función que calcula el precio total de los productos en el carrito
+    const cartTotalPrecio = useMemo(() => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);
+
+
+
 
 
     return (
@@ -20,7 +26,7 @@ export const Header = ({ cart }) => {
                             <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
 
                             <div id="carrito" className="bg-white p-3">
-                                {isEmpty() ? (
+                                {isEmpty ? (
                                     <p className="text-center">El carrito está vacío</p>
                                 ) : (
                                     <>
@@ -58,7 +64,7 @@ export const Header = ({ cart }) => {
 
                                         {/* Precio total del carrito */}
                                         <p className="text-end">
-                                            Total a pagar: <span className="fw-bold">${cartTotalPrecio()}</span>
+                                            Total a pagar: <span className="fw-bold">${cartTotalPrecio}</span>
                                         </p>
                                         <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
                                     </>
