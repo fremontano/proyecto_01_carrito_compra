@@ -5,11 +5,7 @@ export const Header = ({ cart }) => {
     const isEmpty = useMemo(() => cart.length === 0, [cart]);
 
     // Función que calcula el precio total de los productos en el carrito
-    // Función que calcula el precio total de los productos en el carrito
     const cartTotalPrecio = useMemo(() => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);
-
-
-
 
 
     return (
