@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Footer } from "./components/Footer"
 import { Guitar } from "./components/Guitar"
 import { Header } from "./components/Header"
@@ -6,14 +6,39 @@ import { dbGuitars } from "./data/db";
 
 function App() {
 
+
+  // Funcion para obtener el estado inicial del carrito desde el almacenamiento local.
+  // Intenta recuperar el valor del carrito guardado en el almacenamiento local bajo la clave 'cart'.
+  // Si existe un valor, lo convierte de una cadena JSON a un arreglo de objetos usando `JSON.parse`.
+  // Si no hay ningún valor en el almacenamiento local (es decir, si el valor es `null`),
+  // la función devuelve un arreglo vacío, indicando que el carrito está vacío.
+  // Esta función se utiliza para inicializar el estado del carrito al cargar la aplicación.
+  const initialCart = () => {
+    const localStorageCart = localStorage.getItem('cart');
+    return localStorageCart ? JSON.parse(localStorageCart) : [];
+  }
+
+
   // Aquí se almacenarán los datos de las guitarras en un array
   const [data, setData] = useState(dbGuitars);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(initialCart);
 
   const MAX_ITEMS = 10;
   const MIN_ITEMS = 1;
 
   console.log(cart)
+
+  // useEffect para sincronizar el carrito con el almacenamiento local.
+  // Este efecto se ejecuta cada vez que cambia el estado del carrito (`cart`).
+  // Convierte el arreglo `cart` en una cadena JSON usando `JSON.stringify`,
+  // y guarda esta cadena en el almacenamiento local del navegador con la clave 'cart'.
+  // Esto asegura que el carrito de compras se persiste en el almacenamiento local
+  // y puede ser recuperado cuando el usuario vuelve a cargar la página.
+  //luego en INITIALCART me aseguro de que esos datos persistan
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
 
 
 
@@ -21,7 +46,11 @@ function App() {
   // agregar item al carrito 
   const addToCart = (items) => {
     const itemExiste = cart.findIndex(guitar => guitar.id === items.id);
+
     if (itemExiste >= 0) {
+      // si el item ya existe en el carrito, incrementar la cantidad si no sobrepasa el límite
+      if (cart[itemExiste].quantity > MAX_ITEMS) return;
+
       const updateCart = [...cart];
       updateCart[itemExiste].quantity += 1;
       setCart(updateCart);
@@ -65,6 +94,12 @@ function App() {
   }
 
 
+  // vaciar el carrito
+  const clearCart = () => {
+    setCart([]);
+  }
+
+
 
   return (
     <>
@@ -74,6 +109,7 @@ function App() {
         removeFromCart={removeFromCart}
         incrementarQuantity={incrementarQuantity}
         decrementarQuantity={decrementarQuantity}
+        clearCart={clearCart}
       />
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
